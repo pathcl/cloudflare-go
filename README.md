@@ -98,8 +98,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	// Print user details
-	fmt.Println(u)
+	uinfo, err := PrettyJSON(u)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(uinfo)
 
 	// Fetch the zone ID
 	id, err := api.ZoneIDByName("sanmartin.io") // Assuming example.com exists in your Cloudflare account already
@@ -119,6 +124,7 @@ func main() {
 	}
 	fmt.Println(r)
 }
+
 ```
 
 Also refer to the
