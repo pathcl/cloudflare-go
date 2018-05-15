@@ -73,7 +73,9 @@ const (
 	tab   = "\t"
 )
 
-func PrettyJson(data interface{}) (string, error) {
+// PrettyJSON make Json look pretty
+func PrettyJSON(data interface{}) (string, error) {
+
 	buffer := new(bytes.Buffer)
 	encoder := json.NewEncoder(buffer)
 	encoder.SetIndent(empty, tab)
@@ -111,7 +113,7 @@ func main() {
 		log.Fatal(err)
 	}
 	// Print zone details
-	r, err := PrettyJson(zone)
+	r, err := PrettyJSON(zone)
 	if err != nil {
 		log.Fatal(err)
 	}
