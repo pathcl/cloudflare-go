@@ -59,6 +59,8 @@ go get github.com/cloudflare/cloudflare-go
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -66,6 +68,22 @@ import (
 	"github.com/cloudflare/cloudflare-go"
 )
 
+const (
+	empty = ""
+	tab   = "\t"
+)
+
+func PrettyJson(data interface{}) (string, error) {
+	buffer := new(bytes.Buffer)
+	encoder := json.NewEncoder(buffer)
+	encoder.SetIndent(empty, tab)
+
+	err := encoder.Encode(data)
+	if err != nil {
+		return empty, err
+	}
+	return buffer.String(), nil
+}
 func main() {
 	// Construct a new API object
 	api, err := cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
@@ -82,7 +100,7 @@ func main() {
 	fmt.Println(u)
 
 	// Fetch the zone ID
-	id, err := api.ZoneIDByName("example.com") // Assuming example.com exists in your Cloudflare account already
+	id, err := api.ZoneIDByName("sanmartin.io") // Assuming example.com exists in your Cloudflare account already
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -93,7 +111,11 @@ func main() {
 		log.Fatal(err)
 	}
 	// Print zone details
-	fmt.Println(zone)
+	r, err := PrettyJson(zone)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(r)
 }
 ```
 
